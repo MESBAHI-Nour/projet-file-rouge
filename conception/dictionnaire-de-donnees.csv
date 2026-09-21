@@ -1,0 +1,19 @@
+Nom,Signification,Format,Obligatoire,Calculée
+id_photographe,Identifiant unique du photographe,Entier,Oui,Non
+nom_photographe,Nom du photographe,Texte,Oui,Non
+prenom_photographe,Prénom du photographe,Texte,Oui,Non
+email_photographe,Adresse e-mail du photographe,Texte,Oui,Non
+mot_de_passe,Mot de passe du photographe,Texte,Oui,Non
+id_image,Identifiant unique de l'image,Entier,Oui,Non
+titre_image,Titre de l'image,Texte,Oui,Non
+description_image,Description de l'image,Texte,Non,Non
+fichier_image,Fichier ou chemin de l'image,Texte,Oui,Non
+prix_image,Prix de vente de l'image,Décimal,Oui,Non
+date_publication,Date de publication de l'image,Date,Oui,Non
+id_style,Identifiant unique du style,Entier,Oui,Non
+nom_style,Nom du style photographique,Texte,Oui,Non
+description_style,Description du style photographique,Texte,Non,Non
+id_licence,Identifiant unique de la licence,Entier,Oui,Non
+nom_licence,Nom de la licence,Texte,Oui,Non
+description_licence,Description de la licence d'utilisation,Texte,Non,Non
+prix_licence,Prix de la licence d'utilisation,Décimal,Oui,Non

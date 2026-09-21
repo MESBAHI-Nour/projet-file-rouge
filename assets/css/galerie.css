@@ -1,0 +1,442 @@
+/* =====================================================================
+   GALERIE.CSS
+   Page publique : banniere, grille de photos, fiche detail.
+   A charger APRES base.css.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. BANNIERE
+   Deux halos colores flous derriere le titre, qui respirent lentement.
+   --------------------------------------------------------------------- */
+.banniere {
+    position: relative;
+    padding: 78px 0 54px;
+    text-align: center;
+    isolation: isolate;
+    /* Les halos sont plus larges que la banniere : sans cette ligne,
+       ils creent une barre de defilement horizontale sur mobile. */
+    overflow: hidden;
+}
+
+/* Halo 1 : teinte accent, en haut a gauche */
+.banniere::before,
+.banniere::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: .5;
+    pointer-events: none;
+}
+
+.banniere::before {
+    width: min(340px, 62vw); height: min(340px, 62vw);
+    top: -40px; left: 4%;
+    background: radial-gradient(circle, rgba(26, 138, 148, .5), transparent 70%);
+    animation: halo 14s ease-in-out infinite alternate;
+}
+
+.banniere::after {
+    width: min(300px, 55vw); height: min(300px, 55vw);
+    top: 10px; right: 4%;
+    background: radial-gradient(circle, rgba(18, 89, 110, .38), transparent 70%);
+    animation: halo 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes halo {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(38px, 26px) scale(1.14); }
+}
+
+.banniere h1 {
+    font-size: clamp(2rem, 5.4vw, 3.15rem);
+    letter-spacing: -.035em;
+    margin-bottom: 16px;
+}
+
+/* Le dernier mot du titre prend le degrade */
+.banniere h1 .accent {
+    background: var(--degrade-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.banniere__intro {
+    max-width: 570px;
+    margin-inline: auto;
+    color: var(--texte-doux);
+    font-size: 1.04rem;
+}
+
+/* ---------------------------------------------------------------------
+   2. FILTRES PAR STYLE
+   --------------------------------------------------------------------- */
+.filtres-galerie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    margin-bottom: 20px;
+}
+
+.filtres-galerie a {
+    padding: 9px 19px;
+    border: 1px solid var(--bordure-forte);
+    border-radius: 99px;
+    background: var(--surface);
+    color: var(--texte-doux);
+    font-size: .89rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform var(--rapide), border-color var(--rapide),
+                color var(--rapide), box-shadow var(--normal);
+}
+
+.filtres-galerie a:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-2);
+    color: var(--accent);
+    box-shadow: var(--ombre-2);
+}
+
+.filtres-galerie a.actif {
+    background: var(--degrade-accent);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: var(--lueur-accent);
+}
+
+.compteur {
+    margin-bottom: 30px;
+    color: var(--texte-clair);
+    font-size: .87rem;
+    text-align: center;
+    letter-spacing: .02em;
+}
+
+/* ---------------------------------------------------------------------
+   3. GRILLE
+   3 colonnes sur ordinateur, 2 sur tablette, 1 sur telephone.
+   --------------------------------------------------------------------- */
+.grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 28px;
+    /* La perspective doit etre posee sur le PARENT pour que l inclinaison
+       des cartes soit coherente entre elles. */
+    perspective: 1400px;
+}
+
+@media (min-width: 1000px) { .grille { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) and (max-width: 999px) { .grille { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 639px) { .grille { grid-template-columns: 1fr; gap: 22px; } }
+
+/* ---------------------------------------------------------------------
+   4. CARTE PHOTO EN 3D
+   Le JavaScript mesure la position de la souris sur la carte et ecrit
+   deux variables CSS (--rx et --ry) qui pilotent la rotation.
+   Sans JavaScript, ces variables valent 0 : la carte reste plate et
+   garde simplement l effet de levee au survol.
+   --------------------------------------------------------------------- */
+.carte {
+    --rx: 0deg;    /* rotation autour de l axe X, pilotee par le JS */
+    --ry: 0deg;    /* rotation autour de l axe Y */
+    --lx: 50%;     /* position du reflet */
+    --ly: 50%;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-grand);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--ombre-2);
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+    transition: transform 420ms var(--courbe), box-shadow var(--normal);
+    will-change: transform;
+}
+
+/* Pendant le survol, on suit la souris : transition plus courte
+   pour que le mouvement colle au curseur. */
+.carte.incline {
+    transition: transform 90ms linear, box-shadow var(--normal);
+    box-shadow: var(--ombre-4);
+}
+
+.carte:hover { box-shadow: var(--ombre-4); }
+
+/* Reflet lumineux qui suit le curseur sur la carte */
+.carte::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+    background: radial-gradient(420px circle at var(--lx) var(--ly),
+                rgba(255, 255, 255, .22), transparent 42%);
+    opacity: 0;
+    transition: opacity var(--normal);
+    pointer-events: none;
+}
+
+.carte:hover::after { opacity: 1; }
+
+/* --- Zone image --- */
+.carte__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface-douce);
+}
+
+.carte__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.01);
+    transition: transform 720ms var(--courbe), filter var(--normal);
+}
+
+.carte:hover .carte__image {
+    transform: scale(1.08);
+    filter: saturate(1.08) contrast(1.03);
+}
+
+/* Voile sombre qui apparait en bas de la photo au survol */
+.carte__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(14, 20, 24, .34), transparent 46%);
+    opacity: 0;
+    transition: opacity var(--normal);
+}
+
+.carte:hover .carte__media::after { opacity: 1; }
+
+/* Etiquette du style : elle se detache en avant de la carte en 3D */
+.carte__style {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    z-index: 2;
+    padding: 6px 13px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, .93);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--texte);
+    font-size: .75rem;
+    font-weight: 650;
+    box-shadow: var(--ombre-1);
+    transform: translateZ(38px);      /* effet de relief */
+}
+
+/* Mention "Voir la photo" qui remonte depuis le bas de l image */
+.carte__apercu {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    z-index: 2;
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(12px) translateZ(26px);
+    transition: opacity var(--normal), transform var(--normal);
+}
+
+.carte:hover .carte__apercu { opacity: 1; transform: translateY(0) translateZ(26px); }
+
+/* --- Contenu texte --- */
+.carte__corps {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 9px;
+    padding: 19px;
+    transform: translateZ(18px);
+}
+
+.carte__titre { font-size: 1.06rem; font-weight: 650; }
+
+.carte__description {
+    font-size: .88rem;
+    color: var(--texte-doux);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.carte__auteur {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: .85rem;
+    color: var(--texte-doux);
+}
+
+.carte__initiales {
+    display: grid;
+    place-items: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--degrade-accent);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+    box-shadow: var(--ombre-1);
+}
+
+.carte__pied {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid var(--bordure);
+}
+
+.carte__prix {
+    font-size: 1.15rem;
+    font-weight: 750;
+    background: var(--degrade-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-variant-numeric: tabular-nums;
+}
+
+.carte__licence { font-size: .77rem; color: var(--texte-clair); text-align: right; }
+
+/* ---------------------------------------------------------------------
+   5. FIL D ARIANE
+   --------------------------------------------------------------------- */
+.fil-ariane {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    align-items: center;
+    margin: 30px 0 22px;
+    font-size: .87rem;
+    color: var(--texte-clair);
+}
+
+.fil-ariane a { color: var(--texte-doux); text-decoration: none; transition: color var(--rapide); }
+.fil-ariane a:hover { color: var(--accent-2); }
+
+/* ---------------------------------------------------------------------
+   6. FICHE DETAIL D UNE PHOTO
+   --------------------------------------------------------------------- */
+.detail {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 44px;
+    align-items: start;
+    margin-bottom: 70px;
+}
+
+@media (max-width: 900px) {
+    .detail { grid-template-columns: 1fr; gap: 30px; }
+}
+
+.detail__media {
+    border-radius: var(--rayon-xl);
+    overflow: hidden;
+    box-shadow: var(--ombre-4);
+    background: var(--surface-douce);
+}
+
+.detail__media img { width: 100%; height: auto; }
+
+.detail__infos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   /* sinon l etiquette s etire sur toute la largeur */
+    gap: 16px;
+}
+
+/* Les elements qui doivent quand meme occuper toute la largeur */
+.detail__infos .detail__achat,
+.detail__infos .detail__titre,
+.detail__infos .detail__description { align-self: stretch; }
+
+.detail__titre { font-size: clamp(1.6rem, 3.6vw, 2.3rem); }
+
+.detail__auteur {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texte-doux);
+    font-size: .94rem;
+}
+
+.detail__description { color: var(--texte-doux); font-size: 1rem; }
+
+/* Encadre prix + licence */
+.detail__achat {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 22px;
+    border-radius: var(--rayon);
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    box-shadow: var(--ombre-2);
+}
+
+.detail__prix-libelle {
+    font-size: .74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--texte-clair);
+    margin-bottom: 5px;
+}
+
+.detail__prix {
+    font-size: 1.85rem;
+    font-weight: 750;
+    background: var(--degrade-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-variant-numeric: tabular-nums;
+}
+
+.detail__licence { text-align: right; }
+.detail__licence-nom { font-weight: 650; }
+.detail__licence-prix { color: var(--texte-doux); font-size: .9rem; }
+.detail__licence-texte { color: var(--texte-clair); font-size: .87rem; }
+.detail__date { color: var(--texte-clair); font-size: .85rem; }
+
+/* ---------------------------------------------------------------------
+   7. PHOTOS SIMILAIRES
+   --------------------------------------------------------------------- */
+.similaires { margin-top: 20px; }
+
+.similaires__titre {
+    font-size: 1.3rem;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--bordure);
+}
+
+/* Sur les petits ecrans, on desactive l inclinaison 3D :
+   elle n a pas de sens sans souris et coute des performances. */
+@media (hover: none) {
+    .carte { transform: none !important; }
+    .carte::after { display: none; }
+}

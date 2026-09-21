@@ -1,0 +1,375 @@
+/* =====================================================================
+   ADMIN.CSS
+   Espace d administration : filtres, tableau, formulaires, fiche detail.
+   A charger APRES base.css.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. BARRE DE FILTRES
+   --------------------------------------------------------------------- */
+.filtres {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-2);
+    padding: 20px;
+    margin-bottom: 26px;
+}
+
+.filtres__champ { display: flex; flex-direction: column; gap: 7px; flex: 1 1 190px; min-width: 0; }
+
+.filtres__champ label {
+    font-size: .73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--texte-clair);
+}
+
+.filtres__actions { display: flex; gap: 10px; flex: 0 0 auto; }
+
+/* ---------------------------------------------------------------------
+   2. CHAMPS DE SAISIE
+   --------------------------------------------------------------------- */
+input, select, textarea {
+    width: 100%;
+    padding: 11px 13px;
+    font: inherit;
+    font-size: .93rem;
+    color: var(--texte);
+    background: var(--surface);
+    border: 1px solid var(--bordure-forte);
+    border-radius: var(--rayon-petit);
+    transition: border-color var(--rapide), box-shadow var(--rapide), background var(--rapide);
+}
+
+input:hover, select:hover, textarea:hover { border-color: #b9bcb7; }
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 4px var(--accent-fond);
+}
+
+textarea { resize: vertical; min-height: 96px; }
+
+.champ--erreur { border-color: var(--rouge-2) !important; }
+.champ--erreur:focus { box-shadow: 0 0 0 4px var(--rouge-fond) !important; }
+
+/* ---------------------------------------------------------------------
+   3. TABLEAU
+   --------------------------------------------------------------------- */
+.tableau-zone {
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-2);
+    overflow-x: auto;
+}
+
+.tableau { width: 100%; border-collapse: collapse; font-size: .92rem; }
+
+.tableau th, .tableau td {
+    padding: 15px 16px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.tableau thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--surface-douce);
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--texte-clair);
+    white-space: nowrap;
+}
+
+/* Survol : la ligne se teinte et se souleve legerement */
+.tableau tbody tr {
+    transition: background var(--rapide), box-shadow var(--normal), transform var(--normal);
+}
+
+.tableau tbody tr:hover {
+    background: var(--accent-fond);
+    box-shadow: var(--ombre-3);
+    transform: scale(1.004);
+    position: relative;
+    z-index: 2;
+}
+
+.tableau tbody tr:last-child td { border-bottom: none; }
+
+.miniature {
+    width: 84px; height: 60px;
+    object-fit: cover;
+    border-radius: var(--rayon-petit);
+    border: 1px solid var(--bordure);
+    background: var(--surface-douce);
+    transition: transform var(--normal), box-shadow var(--normal);
+}
+
+.tableau tbody tr:hover .miniature {
+    transform: scale(1.1) rotate(-1.5deg);
+    box-shadow: var(--ombre-3);
+}
+
+.tableau__actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tableau__actions form { margin: 0; }
+.tableau__actions .bouton { padding: 8px 14px; font-size: .82rem; }
+.tableau__actions-entete { text-align: right; }
+
+/* ---------------------------------------------------------------------
+   4. FORMULAIRES
+   --------------------------------------------------------------------- */
+.formulaire {
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-2);
+    padding: 30px;
+    max-width: 900px;
+}
+
+.champ { margin-bottom: 23px; }
+.champ label { display: block; margin-bottom: 8px; font-size: .88rem; font-weight: 650; }
+
+.champ-groupe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0 18px;
+}
+
+.obligatoire { color: var(--rouge-2); margin-left: 2px; }
+.champ__aide { margin-top: 8px; font-size: .82rem; color: var(--texte-clair); }
+
+.champ__erreur {
+    margin-top: 8px;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--rouge);
+    animation: secousse 340ms var(--courbe);
+}
+
+/* Petite secousse horizontale pour attirer l oeil sur l erreur */
+@keyframes secousse {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-5px); }
+    75%      { transform: translateX(5px); }
+}
+
+.formulaire__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--bordure);
+}
+
+.apercu {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 16px;
+    margin-bottom: 14px;
+    background: var(--surface-douce);
+    border-radius: var(--rayon-petit);
+}
+
+.apercu__image {
+    width: 155px; height: 110px;
+    object-fit: cover;
+    border-radius: var(--rayon-petit);
+    border: 1px solid var(--bordure);
+    box-shadow: var(--ombre-2);
+}
+
+.apercu .champ__aide { margin: 0; }
+
+input[type="file"] { padding: 10px; background: var(--surface-douce); cursor: pointer; }
+
+input[type="file"]::file-selector-button {
+    margin-right: 13px;
+    padding: 8px 15px;
+    border: 1px solid var(--bordure-forte);
+    border-radius: var(--rayon-petit);
+    background: var(--surface);
+    color: var(--texte);
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--rapide), border-color var(--rapide);
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: var(--accent-fond);
+    border-color: var(--accent-2);
+}
+
+/* ---------------------------------------------------------------------
+   5. FICHE DETAIL (page Afficher)
+   --------------------------------------------------------------------- */
+.fiche {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 34px;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-grand);
+    box-shadow: var(--ombre-3);
+    padding: 26px;
+}
+
+@media (max-width: 860px) {
+    .fiche { grid-template-columns: 1fr; gap: 24px; padding: 20px; }
+}
+
+.fiche__media {
+    border-radius: var(--rayon);
+    overflow: hidden;
+    background: var(--surface-douce);
+    box-shadow: var(--ombre-2);
+}
+
+.fiche__media img { width: 100%; height: auto; }
+
+.fiche__infos { display: flex; flex-direction: column; gap: 18px; }
+
+.fiche__prix {
+    font-size: 2rem;
+    font-weight: 750;
+    background: var(--degrade-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-variant-numeric: tabular-nums;
+}
+
+.fiche__description { color: var(--texte-doux); }
+.fiche__description--vide { font-style: italic; color: var(--texte-clair); }
+
+/* Liste de definitions : intitule a gauche, valeur a droite */
+.fiche__liste { margin: 0; display: flex; flex-direction: column; gap: 0; }
+
+.fiche__liste > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 18px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.fiche__liste > div:last-child { border-bottom: none; }
+
+.fiche__liste dt {
+    font-size: .76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--texte-clair);
+    flex: 0 0 auto;
+}
+
+.fiche__liste dd { margin: 0; text-align: right; font-weight: 500; }
+
+.fiche__secondaire { color: var(--texte-clair); font-weight: 400; }
+
+.fiche__fichier {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .82rem;
+    word-break: break-all;
+}
+
+.fiche__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.fiche__actions form { margin: 0; }
+
+/* ---------------------------------------------------------------------
+   6. RESPONSIVE
+   Sous 820px, chaque ligne du tableau devient une carte.
+   L intitule de colonne vient de l attribut data-libelle du HTML.
+   --------------------------------------------------------------------- */
+@media (max-width: 820px) {
+
+    .tableau-zone { border: none; background: transparent; box-shadow: none; overflow: visible; }
+
+    .tableau thead { display: none; }
+
+    .tableau, .tableau tbody, .tableau tr, .tableau td { display: block; width: 100%; }
+
+    .tableau tr {
+        background: var(--surface);
+        border: 1px solid var(--bordure);
+        border-radius: var(--rayon);
+        box-shadow: var(--ombre-2);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        overflow: hidden;
+    }
+
+    .tableau tbody tr:hover { transform: none; box-shadow: var(--ombre-2); background: var(--surface); }
+
+    .tableau td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 10px 16px;
+        border-bottom: none;
+        text-align: right;
+    }
+
+    .tableau td::before {
+        content: attr(data-libelle);
+        flex: 0 0 auto;
+        font-size: .73rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--texte-clair);
+        text-align: left;
+    }
+
+    /* La miniature occupe toute la largeur, en haut de la carte */
+    .tableau td[data-libelle="Image"] { display: block; padding: 0; }
+    .tableau td[data-libelle="Image"]::before { display: none; }
+
+    .miniature {
+        width: 100%; height: 200px;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--bordure);
+    }
+
+    .tableau tbody tr:hover .miniature { transform: none; box-shadow: none; }
+
+    /* Les boutons passent sous leur intitule, sinon la cellule deborde
+       sur les tres petits ecrans (320px). */
+    .tableau td[data-libelle="Actions"] { display: block; text-align: left; padding-top: 14px; }
+    .tableau td[data-libelle="Actions"]::before { display: block; margin-bottom: 10px; }
+
+    .tableau__actions { width: 100%; min-width: 0; }
+    .tableau__actions .bouton { flex: 1 1 0; min-width: 0; }
+
+    .filtres__actions { width: 100%; }
+    .filtres__actions .bouton { flex: 1 1 0; }
+}
+
+@media (max-width: 600px) {
+    .formulaire { padding: 22px 17px; }
+    .page-titre .bouton { width: 100%; }
+    .fiche__liste > div { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .fiche__liste dd { text-align: left; }
+}
