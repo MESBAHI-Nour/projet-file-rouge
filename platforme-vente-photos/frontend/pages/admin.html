@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Plateforme Vente de Photos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-800 antialiased flex flex-col md:flex-row">
+
+  <!-- Barre latérale -->
+  <aside class="bg-slate-900 text-white md:w-64 md:sticky md:top-0 md:h-screen flex flex-col flex-shrink-0 p-4 md:p-6">
+    <div class="mb-4 md:mb-8">
+      <h1 class="text-white font-semibold tracking-tight text-xl">Dashboard Admin</h1>
+      <p class="text-xs text-slate-400 mt-1">Plateforme Vente de Photos</p>
+    </div>
+    <nav class="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
+      <a id="nav-styles" href="#styles" class="rounded-lg px-3 py-2 text-sm font-medium transition-colors bg-indigo-600 text-white" aria-current="page">Styles photographiques</a>
+      <a id="nav-images" href="#images" class="rounded-lg px-3 py-2 text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white">Images</a>
+    </nav>
+  </aside>
+
+  <!-- Zone principale -->
+  <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+
+    <!-- Zone de messages -->
+    <div id="message-container" role="alert" class="hidden rounded-lg px-4 py-3 text-sm mb-6"></div>
+
+    <!-- Section Styles photographiques -->
+    <section id="section-styles">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Styles photographiques</h2>
+          <p class="text-sm text-slate-500">Consultez, ajoutez, modifiez ou supprimez les styles photographiques.</p>
+        </div>
+        <div>
+          <button type="button" id="btn-nouveau-style" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500 shadow-[0_5px_0_0_#3730a3] transition-all duration-100 active:translate-y-1 active:shadow-[0_1px_0_0_#3730a3] motion-reduce:transition-none motion-reduce:hover:[transform:none]">+ Nouveau style</button>
+        </div>
+      </div>
+
+      <!-- Formulaire Style (masqué par défaut) -->
+      <div id="style-form-container" class="hidden bg-white rounded-xl shadow-sm ring-1 ring-slate-200 p-6 mb-6 transition-all duration-300 ease-out hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-2deg)] hover:shadow-2xl motion-reduce:transition-none motion-reduce:hover:[transform:none]">
+        <h3 id="style-form-title" class="text-lg font-semibold text-slate-900 mb-4">Nouveau style photographique</h3>
+        <form id="form-style" class="space-y-4">
+          <input type="hidden" id="style-id">
+          <div>
+            <label for="style-nom" class="block text-sm font-medium text-slate-700 mb-1">Nom du style</label>
+            <input type="text" id="style-nom" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex. Portrait, Paysage, Architecture...">
+          </div>
+          <div>
+            <label for="style-description" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+            <textarea id="style-description" rows="3" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Description détaillée du style (au moins 10 caractères)..."></textarea>
+          </div>
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" id="btn-annuler-style" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-white text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50">Annuler</button>
+            <button type="submit" id="btn-valider-style" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500 shadow-[0_5px_0_0_#3730a3] transition-all duration-100 active:translate-y-1 active:shadow-[0_1px_0_0_#3730a3] motion-reduce:transition-none motion-reduce:hover:[transform:none]">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tableau Styles -->
+      <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-200 overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">ID</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Nom</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Description</th>
+              <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="styles-table-body" class="divide-y divide-slate-200"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section Images -->
+    <section id="section-images" class="hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Images</h2>
+          <p class="text-sm text-slate-500">Consultez, ajoutez, modifiez, validez ou supprimez les images.</p>
+        </div>
+        <div>
+          <button type="button" id="btn-nouvelle-image" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500 shadow-[0_5px_0_0_#3730a3] transition-all duration-100 active:translate-y-1 active:shadow-[0_1px_0_0_#3730a3] motion-reduce:transition-none motion-reduce:hover:[transform:none]">+ Nouvelle image</button>
+        </div>
+      </div>
+
+      <!-- Formulaire Image (masqué par défaut) -->
+      <div id="image-form-container" class="hidden bg-white rounded-xl shadow-sm ring-1 ring-slate-200 p-6 mb-6 transition-all duration-300 ease-out hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-2deg)] hover:shadow-2xl motion-reduce:transition-none motion-reduce:hover:[transform:none]">
+        <h3 id="image-form-title" class="text-lg font-semibold text-slate-900 mb-4">Nouvelle image</h3>
+        <form id="form-image" class="space-y-4">
+          <input type="hidden" id="image-id">
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label for="image-titre" class="block text-sm font-medium text-slate-700 mb-1">Titre</label>
+              <input type="text" id="image-titre" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Titre de l'image (au moins 2 caractères)">
+            </div>
+            <div>
+              <label for="image-style" class="block text-sm font-medium text-slate-700 mb-1">Style photographique</label>
+              <select id="image-style" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+            </div>
+            <div>
+              <label for="image-photographe" class="block text-sm font-medium text-slate-700 mb-1">Photographe</label>
+              <select id="image-photographe" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+            </div>
+            <div>
+              <label for="image-licence" class="block text-sm font-medium text-slate-700 mb-1">Licence</label>
+              <select id="image-licence" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+            </div>
+          </div>
+          <div>
+            <label for="image-description" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+            <textarea id="image-description" rows="3" required class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Description de l'image (au moins 10 caractères)..."></textarea>
+          </div>
+          <div>
+            <div id="image-apercu-container" class="hidden mb-3">
+              <span class="block text-sm font-medium text-slate-700 mb-1">Photo actuelle</span>
+              <img id="image-apercu" src="" alt="Aperçu de la photo actuelle" class="h-14 w-14 rounded-lg object-cover ring-1 ring-slate-200 transition-transform duration-300 ease-out hover:[transform:perspective(600px)_rotateY(-14deg)_rotateX(6deg)_scale(1.15)] hover:shadow-xl hover:relative hover:z-10 motion-reduce:transition-none motion-reduce:hover:[transform:none]">
+            </div>
+            <label for="image-fichier" id="image-fichier-label" class="block text-sm font-medium text-slate-700 mb-1">Photo</label>
+            <input type="file" id="image-fichier" accept="image/jpeg,image/png,image/webp" class="w-full rounded-lg border-0 ring-1 ring-slate-300 px-3 py-2 text-sm text-slate-600 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" id="btn-annuler-image" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-white text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50">Annuler</button>
+            <button type="submit" id="btn-valider-image" class="transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500 shadow-[0_5px_0_0_#3730a3] transition-all duration-100 active:translate-y-1 active:shadow-[0_1px_0_0_#3730a3] motion-reduce:transition-none motion-reduce:hover:[transform:none]">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tableau Images -->
+      <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-200 overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">ID</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Miniature</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Titre</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Style</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Photographe</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Licence</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Statut</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Date d'ajout</th>
+              <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="images-table-body" class="divide-y divide-slate-200"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="../js/styles.js"></script>
+  <script src="../js/images.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

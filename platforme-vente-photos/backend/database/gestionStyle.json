@@ -1,0 +1,17 @@
+[
+  {
+    "id_style": 1,
+    "nom_style": "Portrait",
+    "description": "Photographie centrée sur le visage, les expressions et la personnalité d'un sujet."
+  },
+  {
+    "id_style": 2,
+    "nom_style": "Paysage",
+    "description": "Capture de panoramas naturels, d'espaces sauvages ou d'environnements urbains."
+  },
+  {
+    "id_style": 3,
+    "nom_style": "Macro",
+    "description": "Prise de vue rapprochée révélant les détails invisibles à l'œil nu."
+  }
+]
