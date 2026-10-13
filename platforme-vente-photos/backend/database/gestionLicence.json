@@ -1,0 +1,14 @@
+[
+  {
+    "id_licence": 1,
+    "nom_licence": "Commerciale Standard",
+    "description": "Utilisation commerciale pour supports numériques et imprimés publicitaires.",
+    "conditions": "Attribution de l'auteur recommandée, revente de l'image brute interdite."
+  },
+  {
+    "id_licence": 2,
+    "nom_licence": "Éditoriale",
+    "description": "Usage réservé aux articles de presse, blogs d'information et publications documentaires.",
+    "conditions": "Mention obligatoire du photographe, tout usage commercial ou promotionnel prohibé."
+  }
+]
