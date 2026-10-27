@@ -1,0 +1,12 @@
+[
+  {
+    "id_photographe": 1,
+    "nom": "Dupont",
+    "prenom": "Jean"
+  },
+  {
+    "id_photographe": 2,
+    "nom": "Martin",
+    "prenom": "Sophie"
+  }
+]

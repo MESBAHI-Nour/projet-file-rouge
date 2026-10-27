@@ -1,0 +1,13 @@
+[
+    {
+        "id_image": 1,
+        "titre": "test",
+        "description": "tssssssssssssssssssssssssssssssssssssssst",
+        "url_image": "images\/8a0a64e0eaf1389fd9bb65a11250c7fa.jpg",
+        "date_ajout": "2026-10-02",
+        "statut": "valide",
+        "id_style": 2,
+        "id_photographe": 1,
+        "id_licence": 1
+    }
+]
