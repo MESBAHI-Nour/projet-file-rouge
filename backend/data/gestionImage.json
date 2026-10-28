@@ -1,0 +1,13 @@
+[
+    {
+        "id_image": 1,
+        "titre": "test",
+        "description": "teeeest eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "url_image": "images\/e253db379bc00e03484319568290e798.jpg",
+        "date_ajout": "2026-10-27",
+        "statut": "en_attente",
+        "id_style": 1,
+        "id_photographe": 2,
+        "id_licence": 1
+    }
+]

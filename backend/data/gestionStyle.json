@@ -1,0 +1,17 @@
+[
+    {
+        "id_style": 1,
+        "nom_style": "Portrait",
+        "description": "Photographie artistique centrée sur les visages et les expressions humaines."
+    },
+    {
+        "id_style": 2,
+        "nom_style": "Paysage",
+        "description": "Photographie d'espaces naturels, de panoramas sauvages ou d'horizons lointains."
+    },
+    {
+        "id_style": 3,
+        "nom_style": "Urbain",
+        "description": "Photographie d'architecture moderne, de scènes de rue et de vie citadine."
+    }
+]

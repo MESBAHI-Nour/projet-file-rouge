@@ -1,0 +1,15 @@
+[
+    {
+        "id_licence": 1,
+        "nom_licence": "Standard",
+        "description": "Utilisation personnelle et éditoriale non commerciale.",
+        "conditions": "Interdiction formelle de revente ou d'usage publicitaire direct."
+    },
+    {
+        "id_licence": 2,
+        "nom_licence": "Commerciale",
+        "description": "Utilisation commerciale complète sur tous types de supports médias.",
+        "conditions": "Droits étendus autorisant la diffusion publicitaire et le merchandising."
+    }
+]
+
